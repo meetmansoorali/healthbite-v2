@@ -1,0 +1,2666 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HealthBite — Food & Health Guidance</title>
+    <meta name="description"
+        content="HealthBite helps you understand whether a food is suitable for a specific health condition.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        :root {
+            --green: #15803d;
+            --green-dark: #166534;
+            --green-light: #f0fdf4;
+            --green-soft: #dcfce7;
+
+            --black: #111827;
+            --gray-900: #1f2937;
+            --gray-700: #374151;
+            --gray-600: #4b5563;
+            --gray-500: #6b7280;
+            --gray-400: #9ca3af;
+            --gray-300: #d1d5db;
+            --gray-200: #e5e7eb;
+            --gray-100: #f3f4f6;
+            --gray-50: #f9fafb;
+
+            --white: #ffffff;
+
+            --danger: #dc2626;
+            --warning: #d97706;
+
+            --sidebar-width: 250px;
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+            font-family: "DM Sans", sans-serif;
+            background: var(--white);
+            color: var(--black);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        button,
+        input,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .app {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* =========================================================
+           SIDEBAR
+        ========================================================= */
+
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            border-right: 1px solid var(--gray-200);
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            padding: 22px 14px;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 4px 10px 25px;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            background: var(--green);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+        }
+
+        .brand-name {
+            font-size: 19px;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+        }
+
+        .brand-name span {
+            color: var(--green);
+        }
+
+        .new-chat-btn {
+            border: 1px solid var(--gray-200);
+            background: var(--white);
+            color: var(--black);
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            font-weight: 600;
+            margin-bottom: 18px;
+            transition: .2s;
+        }
+
+        .new-chat-btn:hover {
+            border-color: var(--green);
+            color: var(--green);
+            background: var(--green-light);
+        }
+
+        .nav-title {
+            color: var(--gray-400);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            padding: 0 11px 8px;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-item {
+            width: 100%;
+            border: 0;
+            background: transparent;
+            color: var(--gray-600);
+            height: 43px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 12px;
+            font-weight: 500;
+            text-align: left;
+            transition: .2s;
+        }
+
+        .nav-item i {
+            width: 19px;
+            text-align: center;
+        }
+
+        .nav-item:hover {
+            background: var(--gray-50);
+            color: var(--black);
+        }
+
+        .nav-item.active {
+            color: var(--green-dark);
+            background: var(--green-light);
+            font-weight: 600;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+        }
+
+        .profile-mini {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 10px 3px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--green-soft);
+            color: var(--green-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .profile-text strong {
+            display: block;
+            font-size: 13px;
+        }
+
+        .profile-text small {
+            color: var(--gray-500);
+            font-size: 11px;
+        }
+
+        /* =========================================================
+           MAIN
+        ========================================================= */
+
+        .main {
+            width: calc(100% - var(--sidebar-width));
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            height: 68px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, .95);
+            backdrop-filter: blur(12px);
+            z-index: 50;
+        }
+
+        .page-title {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--gray-500);
+            font-size: 12px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--green);
+            border-radius: 50%;
+        }
+
+        /* =========================================================
+           CHAT
+        ========================================================= */
+
+        .chat-page {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-container {
+            width: min(850px, calc(100% - 40px));
+            margin: 0 auto;
+            flex: 1;
+            padding: 55px 0 170px;
+        }
+
+        .welcome {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .welcome-icon {
+            width: 58px;
+            height: 58px;
+            margin: 0 auto 18px;
+            background: var(--green-light);
+            color: var(--green);
+            border-radius: 17px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+        }
+
+        .welcome h1 {
+            font-size: clamp(26px, 4vw, 36px);
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            max-width: 570px;
+            margin: auto;
+            color: var(--gray-500);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .quick-title {
+            font-size: 12px;
+            color: var(--gray-500);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .quick-chips {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 35px;
+        }
+
+        .chip {
+            border: 1px solid var(--gray-200);
+            background: var(--white);
+            color: var(--gray-700);
+            padding: 8px 13px;
+            border-radius: 999px;
+            font-size: 12px;
+            transition: .2s;
+        }
+
+        .chip:hover {
+            border-color: var(--green);
+            color: var(--green-dark);
+            background: var(--green-light);
+        }
+
+        /* =========================================================
+           INPUT AREA
+        ========================================================= */
+
+        .input-section {
+            border: 1px solid var(--gray-200);
+            border-radius: 18px;
+            background: var(--white);
+            box-shadow: 0 8px 30px rgba(17, 24, 39, .06);
+            overflow: hidden;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .field {
+            padding: 18px 20px;
+        }
+
+        .field+.field {
+            border-left: 1px solid var(--gray-200);
+        }
+
+        .field-label {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--gray-500);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            margin-bottom: 9px;
+        }
+
+        .field-label i {
+            color: var(--green);
+        }
+
+        .field input {
+            width: 100%;
+            border: 0;
+            outline: 0;
+            font-size: 16px;
+            color: var(--black);
+            background: transparent;
+        }
+
+        .field input::placeholder {
+            color: var(--gray-400);
+        }
+
+        .input-footer {
+            border-top: 1px solid var(--gray-200);
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .image-tools {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border: 0;
+            background: transparent;
+            color: var(--gray-500);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: .2s;
+        }
+
+        .icon-btn:hover {
+            background: var(--gray-100);
+            color: var(--black);
+        }
+
+        .send-btn {
+            width: 39px;
+            height: 39px;
+            border: 0;
+            border-radius: 11px;
+            background: var(--green);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: .2s;
+        }
+
+        .send-btn:hover {
+            background: var(--green-dark);
+        }
+
+        .send-btn:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+        .image-preview {
+            display: none;
+            margin: 0 14px 12px;
+            position: relative;
+            width: 90px;
+            height: 90px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--gray-200);
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 22px;
+            height: 22px;
+            border: 0;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, .7);
+            color: white;
+            font-size: 11px;
+        }
+
+        .disclaimer {
+            text-align: center;
+            color: var(--gray-400);
+            font-size: 10px;
+            margin-top: 13px;
+        }
+
+        /* =========================================================
+           MESSAGES
+        ========================================================= */
+
+        .messages {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .message {
+            display: flex;
+            gap: 13px;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-avatar {
+            width: 34px;
+            height: 34px;
+            flex: 0 0 34px;
+            border-radius: 10px;
+            background: var(--green-light);
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+        }
+
+        .user .message-avatar {
+            background: var(--gray-100);
+            color: var(--gray-600);
+            order: 2;
+        }
+
+        .message-content {
+            max-width: 720px;
+        }
+
+        .message-name {
+            font-size: 11px;
+            color: var(--gray-500);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .user .message-name {
+            text-align: right;
+        }
+
+        .message-bubble {
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .user .message-bubble {
+            background: var(--gray-100);
+            padding: 11px 14px;
+            border-radius: 14px;
+        }
+
+        .ai-result {
+            border: 1px solid var(--gray-200);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .result-main {
+            padding: 18px;
+        }
+
+        .result-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .result-subtitle {
+            color: var(--gray-500);
+            font-size: 12px;
+            margin-bottom: 17px;
+        }
+
+        .recommendation {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 13px;
+            border-radius: 10px;
+            background: var(--green-light);
+            color: var(--green-dark);
+            margin-bottom: 14px;
+            font-weight: 600;
+        }
+
+        .result-section {
+            margin-top: 17px;
+        }
+
+        .result-section h4 {
+            font-size: 12px;
+            margin-bottom: 6px;
+            color: var(--gray-700);
+        }
+
+        .result-section p {
+            color: var(--gray-600);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .result-actions {
+            border-top: 1px solid var(--gray-200);
+            padding: 9px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .result-action {
+            border: 0;
+            background: transparent;
+            color: var(--gray-500);
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .result-action:hover {
+            background: var(--gray-100);
+            color: var(--black);
+        }
+
+        /* =========================================================
+           TYPING
+        ========================================================= */
+
+        .typing {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .typing span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--gray-400);
+            animation: typing 1.2s infinite;
+        }
+
+        .typing span:nth-child(2) {
+            animation-delay: .15s;
+        }
+
+        .typing span:nth-child(3) {
+            animation-delay: .3s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+                opacity: .45;
+            }
+
+            30% {
+                transform: translateY(-4px);
+                opacity: 1;
+            }
+        }
+
+        /* =========================================================
+           OTHER PAGES
+        ========================================================= */
+
+        .content-page {
+            width: min(1000px, calc(100% - 40px));
+            margin: 0 auto;
+            padding: 40px 0 100px;
+        }
+
+        .content-page h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .content-page>p {
+            color: var(--gray-500);
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .empty-state {
+            text-align: center;
+            border: 1px dashed var(--gray-300);
+            border-radius: 16px;
+            padding: 60px 20px;
+            color: var(--gray-500);
+        }
+
+        .empty-state i {
+            font-size: 28px;
+            color: var(--gray-300);
+            margin-bottom: 13px;
+        }
+
+        .history-list,
+        .saved-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .history-item,
+        .saved-item {
+            border: 1px solid var(--gray-200);
+            border-radius: 13px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .history-info strong,
+        .saved-info strong {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .history-info span,
+        .saved-info span {
+            color: var(--gray-500);
+            font-size: 12px;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .item-actions button {
+            width: 34px;
+            height: 34px;
+            border: 0;
+            background: var(--gray-100);
+            color: var(--gray-600);
+            border-radius: 8px;
+        }
+
+        /* =========================================================
+           SETTINGS
+        ========================================================= */
+
+        .settings-card {
+            border: 1px solid var(--gray-200);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .settings-row {
+            padding: 17px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .settings-row:last-child {
+            border-bottom: 0;
+        }
+
+        .settings-row strong {
+            font-size: 14px;
+        }
+
+        .settings-row span {
+            display: block;
+            color: var(--gray-500);
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .danger-btn {
+            border: 0;
+            color: var(--danger);
+            background: #fef2f2;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* =========================================================
+           MOBILE NAV
+        ========================================================= */
+
+        .mobile-nav {
+            display: none;
+        }
+
+        .mobile-nav button {
+            border: 0;
+            background: transparent;
+            color: var(--gray-500);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+        }
+
+        .mobile-nav button i {
+            font-size: 16px;
+        }
+
+        .mobile-nav button.active {
+            color: var(--green);
+        }
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 800px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                width: 100%;
+                margin-left: 0;
+                padding-bottom: 70px;
+            }
+
+            .topbar {
+                padding: 0 17px;
+                height: 60px;
+            }
+
+            .chat-container {
+                width: calc(100% - 28px);
+                padding-top: 35px;
+            }
+
+            .welcome {
+                margin-bottom: 30px;
+            }
+
+            .welcome h1 {
+                font-size: 28px;
+            }
+
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .field+.field {
+                border-left: 0;
+                border-top: 1px solid var(--gray-200);
+            }
+
+            .mobile-nav {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 64px;
+                background: rgba(255, 255, 255, .97);
+                backdrop-filter: blur(12px);
+                border-top: 1px solid var(--gray-200);
+                z-index: 200;
+                align-items: center;
+                justify-content: space-around;
+            }
+
+            .content-page {
+                width: calc(100% - 28px);
+                padding-top: 30px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .quick-chips {
+                justify-content: flex-start;
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 4px;
+            }
+
+            .chip {
+                flex: 0 0 auto;
+            }
+
+            .chat-container {
+                padding-bottom: 120px;
+            }
+
+            .message-content {
+                max-width: calc(100% - 45px);
+            }
+        }
+
+        /* =========================================================
+           ERROR
+        ========================================================= */
+
+        .api-error {
+            border: 1px solid #fecaca;
+            background: #fef2f2;
+            color: #991b1b;
+            padding: 13px;
+            border-radius: 11px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .api-error code {
+            display: block;
+            margin-top: 7px;
+            padding: 8px;
+            background: rgba(255, 255, 255, .7);
+            border-radius: 7px;
+            font-size: 11px;
+            word-break: break-word;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- =========================================================
+         SIDEBAR
+    ========================================================== -->
+
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-leaf"></i>
+                </div>
+
+                <div class="brand-name">
+                    Health<span>Bite</span>
+                </div>
+            </div>
+
+            <button class="new-chat-btn" onclick="showPage('home')">
+                <i class="fa-solid fa-plus"></i>
+                New analysis
+            </button>
+
+            <div class="nav-title">Workspace</div>
+
+            <nav class="nav">
+
+                <button class="nav-item active" data-page="home" onclick="showPage('home')">
+                    <i class="fa-solid fa-message"></i>
+                    New analysis
+                </button>
+
+                <button class="nav-item" data-page="history" onclick="showPage('history')">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    History
+                </button>
+
+                <button class="nav-item" data-page="saved" onclick="showPage('saved')">
+                    <i class="fa-regular fa-bookmark"></i>
+                    Saved foods
+                </button>
+
+                <button class="nav-item" data-page="settings" onclick="showPage('settings')">
+                    <i class="fa-solid fa-gear"></i>
+                    Settings
+                </button>
+
+            </nav>
+
+            <div class="sidebar-bottom">
+
+                <div class="profile-mini">
+                    <div class="avatar">H</div>
+
+                    <div class="profile-text">
+                        <strong>HealthBite</strong>
+                        <small>Food guidance assistant</small>
+                    </div>
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =========================================================
+         MAIN
+    ========================================================== -->
+
+        <main class="main">
+
+            <header class="topbar">
+
+                <div class="page-title" id="pageTitle">
+                    New analysis
+                </div>
+
+                <div class="status">
+                    <span class="status-dot"></span>
+                    <span id="statusText">Food guidance assistant</span>
+                </div>
+
+            </header>
+
+
+            <!-- =====================================================
+             HOME
+        ====================================================== -->
+
+            <section id="homePage" class="chat-page">
+
+                <div class="chat-container">
+
+                    <div id="messages" class="messages"></div>
+
+                    <div id="welcome" class="welcome">
+
+                        <div class="welcome-icon">
+                            <i class="fa-solid fa-leaf"></i>
+                        </div>
+
+                        <h1>Can I eat this?</h1>
+
+                        <p>
+                            Tell HealthBite what food you want to eat and
+                            the health condition you're managing.
+                            We'll explain whether it may be suitable,
+                            how much may be reasonable, and what to consider.
+                        </p>
+
+                    </div>
+
+
+                    <div id="quickSection">
+
+                        <div class="quick-title">
+                            Try a condition
+                        </div>
+
+                        <div class="quick-chips">
+
+                            <button class="chip" onclick="setCondition('Diabetes')">
+                                Diabetes
+                            </button>
+
+                            <button class="chip" onclick="setCondition('High blood pressure')">
+                                High blood pressure
+                            </button>
+
+                            <button class="chip" onclick="setCondition('High cholesterol')">
+                                High cholesterol
+                            </button>
+
+                            <button class="chip" onclick="setCondition('Fatty liver')">
+                                Fatty liver
+                            </button>
+
+                            <button class="chip" onclick="setCondition('Weight management')">
+                                Weight management
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- INPUT -->
+
+                    <div class="input-section">
+
+                        <div class="input-grid">
+
+                            <div class="field">
+
+                                <div class="field-label">
+                                    <i class="fa-solid fa-utensils"></i>
+                                    Food
+                                </div>
+
+                                <input id="foodInput" type="text" autocomplete="off"
+                                    placeholder="e.g. Apple, biryani, eggs..." onkeydown="handleInputKey(event)">
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <div class="field-label">
+                                    <i class="fa-solid fa-heart-pulse"></i>
+                                    Condition
+                                </div>
+
+                                <input id="conditionInput" type="text" autocomplete="off" placeholder="e.g. Diabetes"
+                                    onkeydown="handleInputKey(event)">
+
+                            </div>
+
+                        </div>
+
+
+                        <div id="imagePreview" class="image-preview">
+
+                            <img id="previewImage" alt="Food preview">
+
+                            <button class="remove-image" onclick="removeImage()" aria-label="Remove image">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+
+                        </div>
+
+
+                        <div class="input-footer">
+
+                            <div class="image-tools">
+
+                                <input type="file" id="imageInput" accept="image/*" hidden
+                                    onchange="handleImage(event)">
+
+                                <button class="icon-btn" onclick="document.getElementById('imageInput').click()"
+                                    title="Add food image">
+                                    <i class="fa-regular fa-image"></i>
+                                </button>
+
+                            </div>
+
+
+                            <button id="sendBtn" class="send-btn" onclick="analyzeFood()" title="Analyze">
+                                <i class="fa-solid fa-arrow-up"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="disclaimer">
+                        HealthBite provides general informational guidance and is not a substitute for professional
+                        medical advice.
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================================
+             HISTORY
+        ====================================================== -->
+
+            <section id="historyPage" class="content-page" style="display:none;">
+
+                <h1>History</h1>
+
+                <p>
+                    Your previous food analyses are stored on this device.
+                </p>
+
+                <div id="historyList" class="history-list"></div>
+
+            </section>
+
+
+            <!-- =====================================================
+             SAVED
+        ====================================================== -->
+
+            <section id="savedPage" class="content-page" style="display:none;">
+
+                <h1>Saved foods</h1>
+
+                <p>
+                    Foods you saved for quick reference.
+                </p>
+
+                <div id="savedList" class="saved-list"></div>
+
+            </section>
+
+
+            <!-- =====================================================
+             SETTINGS
+        ====================================================== -->
+
+            <section id="settingsPage" class="content-page" style="display:none;">
+
+                <h1>Settings</h1>
+
+                <p>
+                    Manage your local HealthBite data.
+                </p>
+
+                <div class="settings-card">
+
+                    <div class="settings-row">
+
+                        <div>
+                            <strong>Saved analyses</strong>
+                            <span>Stored locally in your browser.</span>
+                        </div>
+
+                        <button class="danger-btn" onclick="clearHistory()">
+                            Clear
+                        </button>
+
+                    </div>
+
+
+                    <div class="settings-row">
+
+                        <div>
+                            <strong>Saved foods</strong>
+                            <span>Remove your locally saved foods.</span>
+                        </div>
+
+                        <button class="danger-btn" onclick="clearSaved()">
+                            Clear
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- =============================================================
+     MOBILE NAV
+============================================================= -->
+
+    <nav class="mobile-nav">
+
+        <button class="active" data-mobile-page="home" onclick="showPage('home')">
+            <i class="fa-solid fa-message"></i>
+            Chat
+        </button>
+
+        <button data-mobile-page="history" onclick="showPage('history')">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            History
+        </button>
+
+        <button data-mobile-page="saved" onclick="showPage('saved')">
+            <i class="fa-regular fa-bookmark"></i>
+            Saved
+        </button>
+
+        <button data-mobile-page="settings" onclick="showPage('settings')">
+            <i class="fa-solid fa-gear"></i>
+            Settings
+        </button>
+
+    </nav>
+
+
+    <script>
+        /* =============================================================
+           GEMINI CONFIGURATION
+        =============================================================
+        
+           IMPORTANT:
+           Put your NEW Gemini API key here.
+        
+           Do NOT use the API key that was previously exposed.
+        
+           For a public production website, move this API call to your
+           own backend. Keeping an API key in browser JavaScript exposes
+           the key to visitors.
+        ============================================================= */
+
+        const API_KEY = "AQ.Ab8RN6LSlOnjTVwaSVcJv7MLwLEAbnoUa29V-UX4dWL6H0nSxg";
+
+        /*
+           Gemini 3.6 Flash is used here.
+           If Google gives your project access to another model,
+           change this value only.
+        */
+        const MODEL_NAME = "gemini-3.6-flash";
+
+
+        /* =============================================================
+           STATE
+        ============================================================= */
+
+        let currentImageBase64 = null;
+        let currentImageMimeType = null;
+
+        let historyData = JSON.parse(
+            localStorage.getItem("healthbite_history") || "[]"
+        );
+
+        let savedFoods = JSON.parse(
+            localStorage.getItem("healthbite_saved") || "[]"
+        );
+
+
+        /* =============================================================
+           DOM HELPERS
+        ============================================================= */
+
+        function $(id) {
+            return document.getElementById(id);
+        }
+
+
+        /* =============================================================
+           PAGE NAVIGATION
+        ============================================================= */
+
+        function showPage(page) {
+
+            const pages = {
+                home: $("homePage"),
+                history: $("historyPage"),
+                saved: $("savedPage"),
+                settings: $("settingsPage")
+            };
+
+            Object.values(pages).forEach(element => {
+                element.style.display = "none";
+            });
+
+            pages[page].style.display =
+                page === "home" ? "flex" : "block";
+
+
+            const titles = {
+                home: "New analysis",
+                history: "History",
+                saved: "Saved foods",
+                settings: "Settings"
+            };
+
+            $("pageTitle").textContent = titles[page];
+
+
+            document.querySelectorAll(".nav-item").forEach(item => {
+                item.classList.toggle(
+                    "active",
+                    item.dataset.page === page
+                );
+            });
+
+
+            document.querySelectorAll(".mobile-nav button").forEach(item => {
+                item.classList.toggle(
+                    "active",
+                    item.dataset.mobilePage === page
+                );
+            });
+
+
+            if (page === "history") {
+                renderHistory();
+            }
+
+            if (page === "saved") {
+                renderSaved();
+            }
+        }
+
+
+        /* =============================================================
+           QUICK CONDITIONS
+        ============================================================= */
+
+        function setCondition(condition) {
+            $("conditionInput").value = condition;
+            $("foodInput").focus();
+        }
+
+
+        /* =============================================================
+           KEYBOARD
+        ============================================================= */
+
+        function handleInputKey(event) {
+
+            if (event.key === "Enter") {
+                event.preventDefault();
+                analyzeFood();
+            }
+        }
+
+
+        /* =============================================================
+           IMAGE HANDLING
+        ============================================================= */
+
+        function handleImage(event) {
+
+            const file = event.target.files?.[0];
+
+            if (!file) {
+                return;
+            }
+
+            if (!file.type.startsWith("image/")) {
+                alert("Please select an image file.");
+                return;
+            }
+
+            currentImageMimeType = file.type;
+
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+
+                const result = e.target.result;
+
+                /*
+                 * Gemini needs only the base64 part, without:
+                 * data:image/jpeg;base64,
+                 */
+                currentImageBase64 = result.split(",")[1];
+
+                $("previewImage").src = result;
+                $("imagePreview").style.display = "block";
+            };
+
+            reader.onerror = function () {
+                alert("Could not read the image.");
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+
+        function removeImage() {
+
+            currentImageBase64 = null;
+            currentImageMimeType = null;
+
+            $("imageInput").value = "";
+            $("previewImage").src = "";
+            $("imagePreview").style.display = "none";
+        }
+
+
+        /* =============================================================
+           MAIN ANALYSIS
+        ============================================================= */
+
+        async function analyzeFood() {
+
+            const food = $("foodInput").value.trim();
+            const condition = $("conditionInput").value.trim();
+
+            if (!food) {
+                $("foodInput").focus();
+                return;
+            }
+
+            if (!condition) {
+                $("conditionInput").focus();
+                return;
+            }
+
+
+            if (
+                !API_KEY ||
+                API_KEY === "PASTE_YOUR_NEW_GEMINI_API_KEY_HERE"
+            ) {
+
+                showConfigurationError();
+
+                return;
+            }
+
+
+            const sendButton = $("sendBtn");
+
+            sendButton.disabled = true;
+
+            $("statusText").textContent = "Analyzing...";
+
+
+            /*
+             * Hide welcome UI after first message.
+             */
+
+            $("welcome").style.display = "none";
+            $("quickSection").style.display = "none";
+
+
+            /*
+             * User message
+             */
+
+            addUserMessage(
+                food,
+                condition,
+                $("previewImage").src
+            );
+
+
+            /*
+             * AI placeholder
+             */
+
+            const aiMsgId = addAIThinking();
+
+
+            /*
+             * Build Gemini prompt
+             */
+
+            const prompt = `
+You are HealthBite, a food and health guidance assistant.
+
+Analyze the following food in relation to the user's health condition.
+
+FOOD:
+${food}
+
+HEALTH CONDITION:
+${condition}
+
+Your response must be practical, simple, cautious and easy to understand.
+
+Give the answer in this structure:
+
+1. Recommendation
+Clearly say whether this food is generally:
+- Better choice
+- Okay in moderation
+- Better to limit
+- Better to avoid
+
+2. Portion
+Give a practical approximate portion if appropriate.
+
+3. Why
+Explain the main reason in simple language.
+
+4. What to watch
+Mention relevant concerns such as:
+- sugar
+- sodium
+- saturated fat
+- calories
+- carbohydrates
+- preparation method
+Only mention factors that are actually relevant.
+
+5. Better option
+If the food is not ideal, give one or two realistic alternatives.
+
+Important:
+- Do not diagnose the user.
+- Do not claim certainty.
+- Do not invent medical facts.
+- Keep the answer concise.
+- Clearly mention that individual medical advice should come from a qualified healthcare professional.
+- If the condition is unclear, say so.
+- If the food is unclear, ask for clarification.
+`;
+
+
+            const parts = [
+                {
+                    text: prompt
+                }
+            ];
+
+
+            /*
+             * If an image exists, add it to the Gemini request.
+             *
+             * IMPORTANT:
+             * We use the REAL MIME type instead of always saying JPEG.
+             */
+
+            if (currentImageBase64) {
+
+                parts.push({
+                    inline_data: {
+                        mime_type: currentImageMimeType || "image/jpeg",
+                        data: currentImageBase64
+                    }
+                });
+
+            }
+
+
+            try {
+
+                /*
+                 * IMPORTANT FIX:
+                 *
+                 * API key is sent through x-goog-api-key header.
+                 *
+                 * We also remove the key from the URL.
+                 */
+
+                const endpoint =
+                    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent`;
+
+
+                const response = await fetch(endpoint, {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-goog-api-key": API_KEY
+                    },
+
+                    body: JSON.stringify({
+
+                        contents: [
+                            {
+                                parts: parts
+                            }
+                        ]
+
+                    })
+
+                });
+
+
+                /*
+                 * Read raw response first.
+                 *
+                 * This is important because previously the app was hiding
+                 * the real Google error behind a generic message.
+                 */
+
+                const rawResponse = await response.text();
+
+
+                console.log(
+                    "HealthBite Gemini HTTP Status:",
+                    response.status
+                );
+
+                console.log(
+                    "HealthBite Gemini Raw Response:",
+                    rawResponse
+                );
+
+
+                let data;
+
+                try {
+
+                    data = JSON.parse(rawResponse);
+
+                } catch (parseError) {
+
+                    throw new Error(
+                        `Gemini returned an invalid response. HTTP ${response.status}.`
+                    );
+
+                }
+
+
+                /*
+                 * Handle HTTP errors properly.
+                 */
+
+                if (!response.ok) {
+
+                    const apiMessage =
+                        data?.error?.message ||
+                        `Gemini request failed with HTTP ${response.status}.`;
+
+                    throw new Error(
+                        `HTTP ${response.status}: ${apiMessage}`
+                    );
+
+                }
+
+
+                /*
+                 * Handle API-level errors.
+                 */
+
+                if (data?.error) {
+
+                    throw new Error(
+                        data.error.message ||
+                        "Gemini API returned an error."
+                    );
+
+                }
+
+
+                /*
+                 * Get generated text.
+                 */
+
+                const replyText =
+                    data?.candidates?.[0]?.content?.parts
+                        ?.map(part => part.text || "")
+                        .join("")
+                        .trim();
+
+
+                /*
+                 * Gemini can sometimes return no text.
+                 */
+
+                if (!replyText) {
+
+                    console.error(
+                        "Unexpected Gemini response:",
+                        data
+                    );
+
+                    const blockReason =
+                        data?.promptFeedback?.blockReason ||
+                        data?.candidates?.[0]?.finishReason;
+
+                    if (blockReason) {
+
+                        throw new Error(
+                            `Gemini did not return an answer. Reason: ${blockReason}`
+                        );
+
+                    }
+
+                    throw new Error(
+                        "Gemini returned no text response."
+                    );
+
+                }
+
+
+                /*
+                 * Render response.
+                 */
+
+                replaceThinkingMessage(
+                    aiMsgId,
+                    replyText,
+                    food,
+                    condition
+                );
+
+
+                /*
+                 * Save to history.
+                 */
+
+                saveHistory(
+                    food,
+                    condition,
+                    replyText
+                );
+
+
+                $("statusText").textContent =
+                    "Food guidance assistant";
+
+
+            } catch (error) {
+
+                /*
+                 * IMPORTANT:
+                 * Show the actual error instead of:
+                 *
+                 * "The service is temporarily busy..."
+                 */
+
+                console.error(
+                    "HealthBite Gemini API Error:",
+                    error
+                );
+
+
+                replaceThinkingWithError(
+                    aiMsgId,
+                    error
+                );
+
+
+                $("statusText").textContent =
+                    "API request failed";
+
+
+            } finally {
+
+                sendButton.disabled = false;
+
+            }
+        }
+
+
+        /* =============================================================
+           CONFIGURATION ERROR
+        ============================================================= */
+
+        function showConfigurationError() {
+
+            $("welcome").style.display = "none";
+            $("quickSection").style.display = "none";
+
+            addAIError(
+                "Your Gemini API key has not been added.",
+                "Open the index.html file and replace PASTE_YOUR_NEW_GEMINI_API_KEY_HERE with your new Gemini API key."
+            );
+        }
+
+
+        /* =============================================================
+           USER MESSAGE
+        ============================================================= */
+
+        function addUserMessage(
+            food,
+            condition,
+            imageSrc
+        ) {
+
+            const messages = $("messages");
+
+            const message = document.createElement("div");
+
+            message.className = "message user";
+
+            const imageHTML =
+                imageSrc
+                    ? `
+                <div style="margin-bottom:8px;">
+                    <img
+                        src="${imageSrc}"
+                        style="
+                            width:90px;
+                            height:90px;
+                            object-fit:cover;
+                            border-radius:10px;
+                            display:block;
+                        "
+                        alt="Food"
+                    >
+                </div>
+              `
+                    : "";
+
+
+            message.innerHTML = `
+
+        <div class="message-content">
+
+            <div class="message-name">
+                You
+            </div>
+
+            <div class="message-bubble">
+
+                ${imageHTML}
+
+                <strong>${escapeHtml(food)}</strong>
+
+                <div style="
+                    margin-top:4px;
+                    color:#6b7280;
+                    font-size:12px;
+                ">
+                    Condition: ${escapeHtml(condition)}
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="message-avatar">
+            <i class="fa-solid fa-user"></i>
+        </div>
+
+    `;
+
+
+            messages.appendChild(message);
+
+            scrollToBottom();
+        }
+
+
+        /* =============================================================
+           AI THINKING
+        ============================================================= */
+
+        function addAIThinking() {
+
+            const id =
+                "ai-" +
+                Date.now() +
+                "-" +
+                Math.random()
+                    .toString(36)
+                    .substring(2, 8);
+
+
+            const message = document.createElement("div");
+
+            message.className = "message";
+
+            message.id = id;
+
+
+            message.innerHTML = `
+
+        <div class="message-avatar">
+            <i class="fa-solid fa-leaf"></i>
+        </div>
+
+        <div class="message-content">
+
+            <div class="message-name">
+                HealthBite
+            </div>
+
+            <div class="message-bubble">
+
+                <div class="typing">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+            $("messages").appendChild(message);
+
+            scrollToBottom();
+
+
+            return id;
+        }
+
+
+        /* =============================================================
+           AI RESPONSE
+        ============================================================= */
+
+        function replaceThinkingMessage(
+            id,
+            text,
+            food,
+            condition
+        ) {
+
+            const message = $(id);
+
+            if (!message) {
+                return;
+            }
+
+
+            message.querySelector(
+                ".message-bubble"
+            ).innerHTML = `
+
+        <div class="ai-result">
+
+            <div class="result-main">
+
+                <div class="result-title">
+                    ${escapeHtml(food)}
+                </div>
+
+                <div class="result-subtitle">
+                    Guidance for ${escapeHtml(condition)}
+                </div>
+
+                <div class="recommendation">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    HealthBite analysis
+
+                </div>
+
+                <div class="result-section">
+
+                    <h4>Analysis</h4>
+
+                    <div>
+                        ${formatAIResponse(text)}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="result-actions">
+
+                <button
+                    class="result-action"
+                    onclick="saveFood(
+                        ${JSON.stringify(food)},
+                        ${JSON.stringify(condition)}
+                    )"
+                >
+                    <i class="fa-regular fa-bookmark"></i>
+                    Save
+                </button>
+
+                <button
+                    class="result-action"
+                    onclick="copyText(
+                        ${JSON.stringify(text)}
+                    )"
+                >
+                    <i class="fa-regular fa-copy"></i>
+                    Copy
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+            scrollToBottom();
+        }
+
+
+        /* =============================================================
+           ERROR MESSAGE
+        ============================================================= */
+
+        function replaceThinkingWithError(
+            id,
+            error
+        ) {
+
+            const message = $(id);
+
+            if (!message) {
+                return;
+            }
+
+
+            const safeMessage =
+                escapeHtml(
+                    error?.message ||
+                    "Unknown API error."
+                );
+
+
+            message.querySelector(
+                ".message-bubble"
+            ).innerHTML = `
+
+        <div class="api-error">
+
+            <strong>
+                Gemini API Error
+            </strong>
+
+            <div style="margin-top:5px;">
+                ${safeMessage}
+            </div>
+
+            <code>
+                Open browser DevTools → Console to see the complete API response.
+            </code>
+
+        </div>
+
+    `;
+
+
+            scrollToBottom();
+        }
+
+
+        /* =============================================================
+           GENERIC AI ERROR
+        ============================================================= */
+
+        function addAIError(
+            title,
+            messageText
+        ) {
+
+            const message = document.createElement("div");
+
+            message.className = "message";
+
+            message.innerHTML = `
+
+        <div class="message-avatar">
+            <i class="fa-solid fa-leaf"></i>
+        </div>
+
+        <div class="message-content">
+
+            <div class="message-name">
+                HealthBite
+            </div>
+
+            <div class="api-error">
+
+                <strong>
+                    ${escapeHtml(title)}
+                </strong>
+
+                <div style="margin-top:5px;">
+                    ${escapeHtml(messageText)}
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+            $("messages").appendChild(message);
+
+            scrollToBottom();
+        }
+
+
+        /* =============================================================
+           FORMAT AI RESPONSE
+        ============================================================= */
+
+        function formatAIResponse(text) {
+
+            /*
+             * Basic safe formatting.
+             *
+             * We escape HTML first so Gemini cannot inject arbitrary HTML.
+             */
+
+            let safe = escapeHtml(text);
+
+
+            /*
+             * Bold markdown.
+             */
+
+            safe = safe.replace(
+                /\*\*(.*?)\*\*/g,
+                "<strong>$1</strong>"
+            );
+
+
+            /*
+             * Headings such as:
+             *
+             * 1. Recommendation
+             * 2. Portion
+             */
+
+            safe = safe.replace(
+                /(^|\n)(\d+\.\s+[^\n]+)/g,
+                "$1<div style=\"font-weight:700;margin-top:14px;margin-bottom:5px;\">$2</div>"
+            );
+
+
+            /*
+             * Bullets.
+             */
+
+            safe = safe.replace(
+                /(^|\n)[•*-]\s+([^\n]+)/g,
+                "$1<div style=\"margin:4px 0 4px 10px;\">• $2</div>"
+            );
+
+
+            /*
+             * New lines.
+             */
+
+            safe = safe.replace(
+                /\n/g,
+                "<br>"
+            );
+
+
+            return safe;
+        }
+
+
+        /* =============================================================
+           HISTORY
+        ============================================================= */
+
+        function saveHistory(
+            food,
+            condition,
+            response
+        ) {
+
+            historyData.unshift({
+
+                id: Date.now(),
+
+                food: food,
+
+                condition: condition,
+
+                response: response,
+
+                date: new Date().toISOString()
+
+            });
+
+
+            /*
+             * Keep local storage small.
+             */
+
+            historyData =
+                historyData.slice(0, 100);
+
+
+            localStorage.setItem(
+                "healthbite_history",
+                JSON.stringify(historyData)
+            );
+        }
+
+
+        function renderHistory() {
+
+            const container = $("historyList");
+
+            if (!historyData.length) {
+
+                container.innerHTML = `
+
+            <div class="empty-state">
+
+                <i class="fa-regular fa-clock"></i>
+
+                <div>
+                    No analyses yet.
+                </div>
+
+            </div>
+
+        `;
+
+                return;
+            }
+
+
+            container.innerHTML =
+                historyData.map(item => `
+
+            <div class="history-item">
+
+                <div class="history-info">
+
+                    <strong>
+                        ${escapeHtml(item.food)}
+                    </strong>
+
+                    <span>
+                        ${escapeHtml(item.condition)}
+                        ·
+                        ${formatDate(item.date)}
+                    </span>
+
+                </div>
+
+                <div class="item-actions">
+
+                    <button
+                        onclick="reuseHistory(
+                            ${item.id}
+                        )"
+                        title="Use again"
+                    >
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </button>
+
+                    <button
+                        onclick="deleteHistory(
+                            ${item.id}
+                        )"
+                        title="Delete"
+                    >
+                        <i class="fa-regular fa-trash-can"></i>
+                    </button>
+
+                </div>
+
+            </div>
+
+        `).join("");
+        }
+
+
+        function reuseHistory(id) {
+
+            const item =
+                historyData.find(
+                    entry => entry.id === id
+                );
+
+            if (!item) {
+                return;
+            }
+
+
+            showPage("home");
+
+            $("foodInput").value =
+                item.food;
+
+            $("conditionInput").value =
+                item.condition;
+
+            $("foodInput").focus();
+        }
+
+
+        function deleteHistory(id) {
+
+            historyData =
+                historyData.filter(
+                    item => item.id !== id
+                );
+
+
+            localStorage.setItem(
+                "healthbite_history",
+                JSON.stringify(historyData)
+            );
+
+
+            renderHistory();
+        }
+
+
+        function clearHistory() {
+
+            if (
+                !confirm(
+                    "Clear all HealthBite history?"
+                )
+            ) {
+                return;
+            }
+
+
+            historyData = [];
+
+            localStorage.removeItem(
+                "healthbite_history"
+            );
+
+            renderHistory();
+        }
+
+
+        /* =============================================================
+           SAVED FOODS
+        ============================================================= */
+
+        function saveFood(
+            food,
+            condition
+        ) {
+
+            const exists =
+                savedFoods.some(
+                    item =>
+                        item.food.toLowerCase() === food.toLowerCase() &&
+                        item.condition.toLowerCase() === condition.toLowerCase()
+                );
+
+
+            if (exists) {
+
+                alert(
+                    "This food is already saved."
+                );
+
+                return;
+            }
+
+
+            savedFoods.unshift({
+
+                id: Date.now(),
+
+                food: food,
+
+                condition: condition
+
+            });
+
+
+            savedFoods =
+                savedFoods.slice(0, 100);
+
+
+            localStorage.setItem(
+                "healthbite_saved",
+                JSON.stringify(savedFoods)
+            );
+
+
+            alert(
+                "Food saved."
+            );
+        }
+
+
+        function renderSaved() {
+
+            const container = $("savedList");
+
+
+            if (!savedFoods.length) {
+
+                container.innerHTML = `
+
+            <div class="empty-state">
+
+                <i class="fa-regular fa-bookmark"></i>
+
+                <div>
+                    No saved foods yet.
+                </div>
+
+            </div>
+
+        `;
+
+                return;
+            }
+
+
+            container.innerHTML =
+                savedFoods.map(item => `
+
+            <div class="saved-item">
+
+                <div class="saved-info">
+
+                    <strong>
+                        ${escapeHtml(item.food)}
+                    </strong>
+
+                    <span>
+                        ${escapeHtml(item.condition)}
+                    </span>
+
+                </div>
+
+                <div class="item-actions">
+
+                    <button
+                        onclick="useSavedFood(
+                            ${item.id}
+                        )"
+                        title="Use again"
+                    >
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </button>
+
+                    <button
+                        onclick="deleteSaved(
+                            ${item.id}
+                        )"
+                        title="Delete"
+                    >
+                        <i class="fa-regular fa-trash-can"></i>
+                    </button>
+
+                </div>
+
+            </div>
+
+        `).join("");
+        }
+
+
+        function useSavedFood(id) {
+
+            const item =
+                savedFoods.find(
+                    entry => entry.id === id
+                );
+
+            if (!item) {
+                return;
+            }
+
+
+            showPage("home");
+
+            $("foodInput").value =
+                item.food;
+
+            $("conditionInput").value =
+                item.condition;
+
+            $("foodInput").focus();
+        }
+
+
+        function deleteSaved(id) {
+
+            savedFoods =
+                savedFoods.filter(
+                    item => item.id !== id
+                );
+
+
+            localStorage.setItem(
+                "healthbite_saved",
+                JSON.stringify(savedFoods)
+            );
+
+
+            renderSaved();
+        }
+
+
+        function clearSaved() {
+
+            if (
+                !confirm(
+                    "Clear all saved foods?"
+                )
+            ) {
+                return;
+            }
+
+
+            savedFoods = [];
+
+            localStorage.removeItem(
+                "healthbite_saved"
+            );
+
+            renderSaved();
+        }
+
+
+        /* =============================================================
+           COPY
+        ============================================================= */
+
+        async function copyText(text) {
+
+            try {
+
+                await navigator.clipboard.writeText(text);
+
+                alert("Copied.");
+
+            } catch (error) {
+
+                alert(
+                    "Could not copy the response."
+                );
+
+            }
+        }
+
+
+        /* =============================================================
+           DATE
+        ============================================================= */
+
+        function formatDate(dateString) {
+
+            try {
+
+                return new Intl.DateTimeFormat(
+                    undefined,
+                    {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric"
+                    }
+                ).format(
+                    new Date(dateString)
+                );
+
+            } catch {
+
+                return "";
+            }
+        }
+
+
+        /* =============================================================
+           HTML ESCAPE
+        ============================================================= */
+
+        function escapeHtml(value) {
+
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+
+        /* =============================================================
+           SCROLL
+        ============================================================= */
+
+        function scrollToBottom() {
+
+            setTimeout(() => {
+
+                window.scrollTo({
+                    top: document.body.scrollHeight,
+                    behavior: "smooth"
+                });
+
+            }, 50);
+        }
+
+
+        /* =============================================================
+           INITIALIZATION
+        ============================================================= */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                showPage("home");
+
+            }
+        );
+    </script>
+
+</body>
+
+</html>
